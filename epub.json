@@ -1,0 +1,776 @@
+{
+  "project_name": "Android Termux EPUB Editor Pro",
+  "version": "2.0.0",
+  "description": "Feature-rich modular EPUB editor optimized for Android Termux with intuitive TUI",
+  "target_environment": {
+    "primary": "Android 14 Termux (Unrooted)",
+    "secondary": ["Linux Terminal", "macOS Terminal", "Windows WSL"],
+    "python_version": "3.8+",
+    "dependencies": ["curses", "zipfile", "re", "pathlib", "dataclasses"] // TODO: Use Textualize or even better libraries
+  },
+  "architecture": {
+    "design_pattern": "Model-View-Controller with Component Architecture",
+    "ui_paradigm": "Material Design inspired TUI with Card-based Layout",
+    "navigation_pattern": "Breadcrumb Navigation with Back Stack",
+    "state_management": "Centralized State with Event-driven Updates"
+  },
+  "core_modules": {
+    "epub_engine": {
+      "description": "Core EPUB processing and manipulation engine",
+      "components": {
+        "epub_loader": {
+          "file": "epub_loader.py",
+          "responsibilities": [
+            "EPUB file validation and loading",
+            "ZIP archive handling",
+            "Content extraction and encoding detection",
+            "Metadata parsing",
+            "File structure analysis"
+          ],
+          "features": [
+            "Memory-efficient loading",
+            "Progress tracking for large files",
+            "Error recovery and validation",
+            "Backup creation",
+            "Format compatibility checking"
+          ]
+        },
+        "content_manager": {
+          "file": "content_manager.py",
+          "responsibilities": [
+            "In-memory content storage",
+            "File content indexing",
+            "Change tracking",
+            "Content validation",
+            "Encoding management"
+          ],
+          "features": [
+            "Lazy loading for performance",
+            "Content caching",
+            "Modification history",
+            "Memory optimization",
+            "Content type detection"
+          ]
+        },
+        "search_engine": {
+          "file": "search_engine.py",
+          "responsibilities": [
+            "Text search across all content",
+            "Regular expression support",
+            "Search result management",
+            "Context extraction",
+            "Search optimization"
+          ],
+          "features": [
+            "Multi-threaded searching",
+            "Fuzzy search capabilities",
+            "Search result caching",
+            "Advanced regex patterns",
+            "Case-insensitive options",
+            "Whole word matching",
+            "Search result highlighting",
+            "Search history"
+          ]
+        },
+        "replace_engine": {
+          "file": "replace_engine.py",
+          "responsibilities": [
+            "Text replacement operations",
+            "Batch replacement handling",
+            "Undo/Redo functionality (future)",
+            "Replacement validation",
+            "Change tracking"
+          ],
+          "features": [
+            "Preview before replace",
+            "Selective replacement",
+            "Batch operations",
+            "Regex-based replacement",
+            "Smart replacement patterns",
+            "Replacement statistics",
+            "Rollback capabilities"
+          ]
+        },
+        "epub_saver": {
+          "file": "epub_saver.py",
+          "responsibilities": [
+            "EPUB file reconstruction",
+            "ZIP compression",
+            "Backup management",
+            "File integrity checking",
+            "Save optimization"
+          ],
+          "features": [
+            "Atomic save operations",
+            "Compression optimization",
+            "Backup rotation",
+            "Save progress tracking",
+            "Integrity validation",
+            "Error recovery"
+          ]
+        }
+      }
+    },
+    "ui_framework": {
+      "description": "Android-optimized TUI framework with Material Design principles",
+      "components": {
+        "layout_manager": {
+          "file": "layout_manager.py",
+          "responsibilities": [
+            "Screen layout calculations",
+            "Responsive design handling",
+            "Component positioning",
+            "Viewport management",
+            "Scroll handling"
+          ],
+          "features": [
+            "Mobile-first responsive design",
+            "Automatic layout adjustment",
+            "Portrait/landscape adaptation",
+            "Dynamic component sizing",
+            "Scroll region management",
+            "Z-index layering"
+          ]
+        },
+        "material_components": {
+          "file": "material_components.py",
+          "responsibilities": [
+            "Material Design UI components",
+            "Component styling",
+            "Interactive elements",
+            "Visual feedback",
+            "Animation effects"
+          ],
+          "features": [
+            "Material Design cards",
+            "Elevated buttons",
+            "Progress indicators",
+            "Status chips",
+            "Input fields",
+            "Selection lists",
+            "Navigation drawers",
+            "Snackbar notifications",
+            "Floating action buttons",
+            "Tab navigation"
+          ]
+        },
+        "color_scheme_manager": {
+          "file": "color_manager.py",
+          "responsibilities": [
+            "Color palette management",
+            "Theme switching",
+            "Accessibility compliance",
+            "Visual hierarchy",
+            "State indication"
+          ],
+          "features": [
+            "Material Design color palette",
+            "Dark/Light theme support",
+            "High contrast mode",
+            "Color blind friendly options",
+            "Dynamic accent colors",
+            "Semantic color mapping",
+            "Terminal capability detection"
+          ]
+        },
+        "animation_engine": {
+          "file": "animation_engine.py",
+          "responsibilities": [
+            "Smooth transitions",
+            "Loading animations",
+            "Micro-interactions",
+            "Visual feedback",
+            "State transitions"
+          ],
+          "features": [
+            "Fade in/out effects",
+            "Slide transitions",
+            "Progress animations",
+            "Pulse effects",
+            "Loading spinners",
+            "Typing indicators",
+            "Smooth scrolling"
+          ]
+        }
+      }
+    },
+    "navigation_system": {
+      "description": "Comprehensive navigation and state management system",
+      "components": {
+        "screen_manager": {
+          "file": "screen_manager.py",
+          "responsibilities": [
+            "Screen routing",
+            "Navigation stack management",
+            "Screen transitions",
+            "State preservation",
+            "Back button handling"
+          ],
+          "features": [
+            "Screen stack management",
+            "Deep linking support",
+            "State serialization",
+            "Navigation history",
+            "Screen caching",
+            "Lazy screen loading"
+          ]
+        },
+        "input_handler": {
+          "file": "input_handler.py",
+          "responsibilities": [
+            "Keyboard input processing",
+            "Input mapping",
+            "Gesture recognition",
+            "Accessibility support",
+            "Input validation"
+          ],
+          "features": [
+            "Context-sensitive input",
+            "Keyboard shortcuts",
+            "Input buffering",
+            "Multi-key combinations",
+            "Input history",
+            "Accessibility key mapping"
+          ]
+        },
+        "breadcrumb_manager": {
+          "file": "breadcrumb_manager.py",
+          "responsibilities": [
+            "Navigation breadcrumb tracking",
+            "Path visualization",
+            "Quick navigation",
+            "Location awareness",
+            "Navigation state"
+          ],
+          "features": [
+            "Dynamic breadcrumb generation",
+            "Clickable breadcrumb paths",
+            "Path truncation for mobile",
+            "Navigation shortcuts",
+            "Breadcrumb history"
+          ]
+        }
+      }
+    },
+    "data_models": {
+      "description": "Data structures and business logic models",
+      "components": {
+        "epub_model": {
+          "file": "epub_model.py",
+          "responsibilities": [
+            "EPUB data structure",
+            "Content organization",
+            "Metadata management",
+            "File relationships",
+            "Data validation"
+          ],
+          "features": [
+            "Structured EPUB representation",
+            "Content hierarchy",
+            "Metadata extraction",
+            "File dependency tracking",
+            "Data integrity checks"
+          ]
+        },
+        "search_models": {
+          "file": "search_models.py",
+          "responsibilities": [
+            "Search result structures",
+            "Search configuration",
+            "Result ranking",
+            "Context management",
+            "Search statistics"
+          ],
+          "features": [
+            "Rich search results",
+            "Context preservation",
+            "Result clustering",
+            "Search analytics",
+            "Result caching"
+          ]
+        },
+        "settings_model": {
+          "file": "settings_model.py",
+          "responsibilities": [
+            "Application settings",
+            "User preferences",
+            "Configuration management",
+            "Settings persistence",
+            "Default values"
+          ],
+          "features": [
+            "Hierarchical settings",
+            "Settings validation",
+            "Auto-save preferences",
+            "Settings export/import",
+            "Default restoration"
+          ]
+        }
+      }
+    },
+    "utility_modules": {
+      "description": "Supporting utilities and helper functions",
+      "components": {
+        "file_utils": {
+          "file": "file_utils.py",
+          "responsibilities": [
+            "File system operations",
+            "Path management",
+            "File validation",
+            "Backup utilities",
+            "Temporary file handling"
+          ],
+          "features": [
+            "Safe file operations",
+            "Path normalization",
+            "File type detection",
+            "Backup management",
+            "Cleanup utilities"
+          ]
+        },
+        "text_utils": {
+          "file": "text_utils.py",
+          "responsibilities": [
+            "Text processing utilities",
+            "Encoding detection",
+            "Text formatting",
+            "String manipulation",
+            "Text analysis"
+          ],
+          "features": [
+            "Smart text wrapping",
+            "Encoding conversion",
+            "Text statistics",
+            "Language detection",
+            "Content sanitization"
+          ]
+        },
+        "validation_utils": {
+          "file": "validation_utils.py",
+          "responsibilities": [
+            "Input validation",
+            "Data integrity checks",
+            "Format validation",
+            "Error handling",
+            "Sanitization"
+          ],
+          "features": [
+            "Comprehensive validation rules",
+            "Custom validators",
+            "Error message generation",
+            "Data sanitization",
+            "Validation caching"
+          ]
+        }
+      }
+    }
+  },
+  "screen_definitions": {
+    "dashboard_screen": {
+      "file": "screens/dashboard.py",
+      "description": "Main application dashboard",
+      "components": [
+        "File information card",
+        "Statistics overview card",
+        "Quick action buttons",
+        "Recent activity panel",
+        "Status indicators"
+      ],
+      "features": [
+        "Real-time file status",
+        "Quick navigation",
+        "Visual file statistics",
+        "Action shortcuts",
+        "Modification warnings"
+      ]
+    },
+    "file_manager_screen": {
+      "file": "screens/file_manager.py",
+      "description": "EPUB file loading and management",
+      "components": [
+        "File browser",
+        "File information panel",
+        "Loading progress",
+        "Error handling display",
+        "Recent files list"
+      ],
+      "features": [
+        "Native file browser",
+        "File preview",
+        "Favorite locations",
+        "File history",
+        "Drag and drop support"
+      ]
+    },
+    "search_screen": {
+      "file": "screens/search.py",
+      "description": "Advanced text search interface",
+      "components": [
+        "Search input field",
+        "Search options panel",
+        "Preview results",
+        "Search history",
+        "Quick search buttons"
+      ],
+      "features": [
+        "Real-time search suggestions",
+        "Advanced search options",
+        "Search pattern library",
+        "Regular expression builder",
+        "Search result preview"
+      ]
+    },
+    "search_results_screen": {
+      "file": "screens/search_results.py",
+      "description": "Search results display and navigation",
+      "components": [
+        "Results list view",
+        "Context preview",
+        "Navigation controls",
+        "Filter options",
+        "Bulk action buttons"
+      ],
+      "features": [
+        "Syntax highlighting",
+        "Context expansion",
+        "Result filtering",
+        "Bulk operations",
+        "Export functionality"
+      ]
+    },
+    "replace_screen": {
+      "file": "screens/replace.py",
+      "description": "Text replacement interface",
+      "components": [
+        "Find/Replace input fields",
+        "Replacement options",
+        "Preview panel",
+        "Progress indicator",
+        "Confirmation dialogs"
+      ],
+      "features": [
+        "Live replacement preview",
+        "Selective replacement",
+        "Replacement patterns",
+        "Undo/Redo support",
+        "Batch replacement queue"
+      ]
+    },
+    "batch_operations_screen": {
+      "file": "screens/batch_operations.py",
+      "description": "Batch processing interface",
+      "components": [
+        "Operation queue",
+        "Pattern input forms",
+        "Progress tracking",
+        "Result summary",
+        "Error reporting"
+      ],
+      "features": [
+        "Multiple operation types",
+        "Operation templates",
+        "Progress visualization",
+        "Error recovery",
+        "Operation history"
+      ]
+    },
+    "settings_screen": {
+      "file": "screens/settings.py",
+      "description": "Application settings and preferences",
+      "components": [
+        "Settings categories",
+        "Toggle switches",
+        "Input fields",
+        "Theme selector",
+        "Reset options"
+      ],
+      "features": [
+        "Organized settings groups",
+        "Real-time preview",
+        "Settings validation",
+        "Import/Export settings",
+        "Default restoration"
+      ]
+    },
+    "help_screen": {
+      "file": "screens/help.py",
+      "description": "Help and documentation interface",
+      "components": [
+        "Help topics",
+        "Keyboard shortcuts",
+        "Tutorial guides",
+        "FAQ section",
+        "Version information"
+      ],
+      "features": [
+        "Searchable help content",
+        "Interactive tutorials",
+        "Context-sensitive help",
+        "Keyboard reference",
+        "Getting started guide"
+      ]
+    }
+  },
+  "feature_specifications": {
+    "core_features": {
+      "epub_loading": {
+        "priority": "critical",
+        "description": "Load and parse EPUB files efficiently",
+        "acceptance_criteria": [
+          "Load EPUB files up to 100MB",
+          "Handle malformed EPUB files gracefully",
+          "Display loading progress",
+          "Validate EPUB structure",
+          "Support EPUB 2.0 and 3.0 formats"
+        ]
+      },
+      "text_search": {
+        "priority": "critical",
+        "description": "Comprehensive text search functionality",
+        "acceptance_criteria": [
+          "Search across all EPUB content",
+          "Support regular expressions",
+          "Case-sensitive/insensitive options",
+          "Whole word matching",
+          "Context preservation",
+          "Search result highlighting"
+        ]
+      },
+      "text_replacement": {
+        "priority": "critical",
+        "description": "Flexible text replacement operations",
+        "acceptance_criteria": [
+          "Individual replacement",
+          "Batch replacement",
+          "Regex-based replacement",
+          "Preview before replace",
+          "Selective replacement",
+          "Replacement statistics"
+        ]
+      },
+      "file_saving": {
+        "priority": "critical",
+        "description": "Safe EPUB file saving with backup",
+        "acceptance_criteria": [
+          "Atomic save operations",
+          "Automatic backup creation",
+          "Integrity validation",
+          "Progress indication",
+          "Error recovery"
+        ]
+      }
+    },
+    "ui_features": {
+      "material_design": {
+        "priority": "high",
+        "description": "Material Design inspired interface",
+        "acceptance_criteria": [
+          "Card-based layout",
+          "Consistent color scheme",
+          "Visual hierarchy",
+          "Responsive design",
+          "Touch-friendly navigation"
+        ]
+      },
+      "mobile_optimization": {
+        "priority": "high",
+        "description": "Optimized for mobile screens",
+        "acceptance_criteria": [
+          "Portrait orientation support",
+          "Readable text sizes",
+          "Efficient space usage",
+          "Touch-friendly buttons",
+          "Swipe navigation"
+        ]
+      },
+      "accessibility": {
+        "priority": "medium",
+        "description": "Accessibility features",
+        "acceptance_criteria": [
+          "High contrast mode",
+          "Keyboard navigation",
+          "Screen reader compatibility",
+          "Color blind friendly",
+          "Large text support"
+        ]
+      }
+    },
+    "advanced_features": {
+      "search_history": {
+        "priority": "medium",
+        "description": "Search and replace history",
+        "acceptance_criteria": [
+          "Store search patterns",
+          "Quick pattern recall",
+          "Pattern favorites",
+          "History cleanup",
+          "Pattern sharing"
+        ]
+      },
+      "batch_processing": {
+        "priority": "medium",
+        "description": "Advanced batch operations",
+        "acceptance_criteria": [
+          "Multiple find/replace pairs",
+          "Operation templates",
+          "Batch validation",
+          "Progress tracking",
+          "Error handling"
+        ]
+      },
+      "export_functionality": {
+        "priority": "low",
+        "description": "Export search results and changes",
+        "acceptance_criteria": [
+          "Export search results",
+          "Change reports",
+          "Multiple formats",
+          "Custom templates",
+          "Batch export"
+        ]
+      }
+    }
+  },
+  "performance_requirements": {
+    "loading_time": {
+      "target": "< 5 seconds for files up to 50MB",
+      "measurement": "Time from file selection to ready state"
+    },
+    "search_speed": {
+      "target": "< 2 seconds for complex regex searches",
+      "measurement": "Time from search initiation to results display"
+    },
+    "memory_usage": {
+      "target": "< 256MB for typical EPUB files",
+      "measurement": "Peak memory usage during operations"
+    },
+    "ui_responsiveness": {
+      "target": "< 100ms for UI interactions",
+      "measurement": "Time from input to visual feedback"
+    }
+  },
+  "testing_strategy": {
+    "unit_tests": {
+      "coverage_target": "85%",
+      "focus_areas": [
+        "EPUB parsing logic",
+        "Search algorithms",
+        "Text replacement",
+        "File operations",
+        "UI components"
+      ]
+    },
+    "integration_tests": {
+      "scenarios": [
+        "End-to-end EPUB processing",
+        "Complex search and replace workflows",
+        "Error handling and recovery",
+        "Performance with large files",
+        "UI navigation flows"
+      ]
+    },
+    "user_acceptance_tests": {
+      "test_cases": [
+        "First-time user experience",
+        "Common workflow efficiency",
+        "Error handling clarity",
+        "Mobile usability",
+        "Accessibility compliance"
+      ]
+    }
+  },
+  "deployment_configuration": {
+    "file_structure": {
+      "root_directory": "epub_editor_pro/",
+      "subdirectories": {
+        "core/": "Core EPUB processing modules",
+        "ui/": "User interface components",
+        "screens/": "Application screens",
+        "utils/": "Utility modules",
+        "tests/": "Test suites",
+        "docs/": "Documentation",
+        "assets/": "Static assets and resources"
+      }
+    },
+    "entry_points": {
+      "main_application": "epub_editor_pro.py",
+      "cli_interface": "epub_cli.py",
+      "test_runner": "run_tests.py",
+      "setup_script": "setup.py"
+    },
+    "configuration_files": {
+      "app_config": "config/app_config.json",
+      "ui_themes": "config/themes.json",
+      "keyboard_mappings": "config/keybindings.json",
+      "default_settings": "config/defaults.json"
+    }
+  },
+  "future_enhancements": {
+    "phase_2_features": [
+      "Plugin system for custom processors",
+      "Cloud storage integration",
+      "Collaborative editing features",
+      "Advanced text analytics",
+      "Machine learning powered suggestions"
+    ],
+    "phase_3_features": [
+      "Web interface option",
+      "Mobile app companion",
+      "API for external integrations",
+      "Advanced automation workflows",
+      "Multi-language support"
+    ]
+  },
+  "development_timeline": {
+    "phase_1": {
+      "duration": "4-6 weeks",
+      "deliverables": [
+        "Core EPUB processing engine",
+        "Basic TUI framework",
+        "Essential search and replace",
+        "File management",
+        "Basic UI components"
+      ]
+    },
+    "phase_2": {
+      "duration": "3-4 weeks", 
+      "deliverables": [
+        "Advanced UI components",
+        "Enhanced search features",
+        "Batch processing",
+        "Settings management",
+        "Performance optimization"
+      ]
+    },
+    "phase_3": {
+      "duration": "2-3 weeks",
+      "deliverables": [
+        "Polish and refinement",
+        "Comprehensive testing",
+        "Documentation",
+        "User guides",
+        "Final optimization"
+      ]
+    }
+  },
+  "success_metrics": {
+    "user_experience": [
+      "Task completion time reduction by 50%",
+      "User satisfaction score > 4.5/5",
+      "Learning curve < 15 minutes for basic tasks",
+      "Error rate < 5% for common operations"
+    ],
+    "technical_performance": [
+      "Zero data loss incidents",
+      "99.9% uptime reliability",
+      "Memory usage optimization > 30%",
+      "Loading time improvement > 40%"
+    ],
+    "adoption_metrics": [
+      "User retention rate > 80%",
+      "Feature utilization > 70%",
+      "Support ticket reduction > 60%",
+      "Positive feedback ratio > 90%"
+    ]
+  }
+}
