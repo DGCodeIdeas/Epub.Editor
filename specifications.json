@@ -2,17 +2,67 @@
   "project_name": "Android Termux EPUB Editor Pro",
   "version": "2.0.0",
   "description": "Feature-rich modular EPUB editor optimized for Android Termux with intuitive TUI",
+  "branding_and_identity": {
+    "suggested_name": "Epsilon Editor",
+    "logo_concept": "A stylized Greek letter epsilon (ε) combined with a book or a cursor.",
+    "tagline": "The last EPUB editor you'll ever need."
+  },
   "target_environment": {
     "primary": "Android 14 Termux (Unrooted)",
     "secondary": ["Linux Terminal", "macOS Terminal", "Windows WSL"],
     "python_version": "3.8+",
-    "dependencies": ["curses", "zipfile", "re", "pathlib", "dataclasses"] // TODO: Use Textualize or even better libraries
+    "dependencies": {
+      "third_party": [
+        "textual",
+        "beautifulsoup4",
+        "lxml"
+      ],
+      "standard_library": [
+        "zipfile",
+        "re",
+        "pathlib",
+        "dataclasses"
+      ]
+    }
   },
   "architecture": {
     "design_pattern": "Model-View-Controller with Component Architecture",
     "ui_paradigm": "Material Design inspired TUI with Card-based Layout",
     "navigation_pattern": "Breadcrumb Navigation with Back Stack",
     "state_management": "Centralized State with Event-driven Updates"
+  },
+  "deployment_configuration": {
+    "file_structure": {
+      "root_directory": "epub_editor_pro/",
+      "subdirectories": {
+        "core/": "Core EPUB processing modules",
+        "ui/": "User interface components",
+        "screens/": "Application screens",
+        "utils/": "Utility modules",
+        "tests/": "Test suites",
+        "docs/": "Documentation",
+        "assets/": "Static assets and resources"
+      }
+    },
+    "entry_points": {
+      "main_application": "epub_editor_pro.py",
+      "cli_interface": "epub_cli.py",
+      "test_runner": "run_tests.py",
+      "setup_script": "setup.py"
+    },
+    "configuration_files": {
+      "app_config": "config/app_config.json",
+      "ui_themes": "config/themes.json",
+      "keyboard_mappings": "config/keybindings.json",
+      "default_settings": "config/defaults.json"
+    }
+  },
+  "contribution_guidelines": {
+    "code_style": "PEP 8 with Black code formatter",
+    "commit_messages": "Conventional Commits specification",
+    "branching_strategy": "GitFlow (feature branches, develop, main)",
+    "pull_requests": "Requires at least one approving review before merging",
+    "issue_tracking": "Use GitHub Issues with provided templates for bugs and feature requests"
   },
   "core_modules": {
     "epub_engine": {
@@ -59,7 +109,8 @@
             "Regular expression support",
             "Search result management",
             "Context extraction",
-            "Search optimization"
+            "Search optimization",
+            "Content indexing for faster searches"
           ],
           "features": [
             "Multi-threaded searching",
@@ -69,7 +120,8 @@
             "Case-insensitive options",
             "Whole word matching",
             "Search result highlighting",
-            "Search history"
+            "Search history",
+            "Persistent search index"
           ]
         },
         "replace_engine": {
@@ -77,7 +129,7 @@
           "responsibilities": [
             "Text replacement operations",
             "Batch replacement handling",
-            "Undo/Redo functionality (future)",
+            "Undo/Redo functionality",
             "Replacement validation",
             "Change tracking"
           ],
@@ -142,16 +194,16 @@
             "Animation effects"
           ],
           "features": [
-            "Material Design cards",
-            "Elevated buttons",
-            "Progress indicators",
-            "Status chips",
-            "Input fields",
-            "Selection lists",
-            "Navigation drawers",
-            "Snackbar notifications",
-            "Floating action buttons",
-            "Tab navigation"
+            "Material Design cards with shadows and rounded corners",
+            "Elevated buttons with press animations",
+            "Linear and circular progress indicators",
+            "Status chips with icons and dismiss actions",
+            "Input fields with validation states and helper text",
+            "Selection lists with ripple effects",
+            "Navigation drawers with slide-in animations",
+            "Snackbar notifications for brief messages",
+            "Floating action buttons for primary actions",
+            "Tab navigation with swipe gestures"
           ]
         },
         "color_scheme_manager": {
@@ -190,6 +242,19 @@
             "Loading spinners",
             "Typing indicators",
             "Smooth scrolling"
+          ]
+        },
+        "keybinding_manager": {
+          "file": "keybinding_manager.py",
+          "responsibilities": [
+            "Global and context-aware keybindings",
+            "User-customizable shortcuts",
+            "Command palette for keybinding discovery"
+          ],
+          "features": [
+            "Vim-style keybindings (optional)",
+            "Emacs-style keybindings (optional)",
+            "Printable cheat sheet of keybindings"
           ]
         }
       }
@@ -677,32 +742,6 @@
         "Mobile usability",
         "Accessibility compliance"
       ]
-    }
-  },
-  "deployment_configuration": {
-    "file_structure": {
-      "root_directory": "epub_editor_pro/",
-      "subdirectories": {
-        "core/": "Core EPUB processing modules",
-        "ui/": "User interface components",
-        "screens/": "Application screens",
-        "utils/": "Utility modules",
-        "tests/": "Test suites",
-        "docs/": "Documentation",
-        "assets/": "Static assets and resources"
-      }
-    },
-    "entry_points": {
-      "main_application": "epub_editor_pro.py",
-      "cli_interface": "epub_cli.py",
-      "test_runner": "run_tests.py",
-      "setup_script": "setup.py"
-    },
-    "configuration_files": {
-      "app_config": "config/app_config.json",
-      "ui_themes": "config/themes.json",
-      "keyboard_mappings": "config/keybindings.json",
-      "default_settings": "config/defaults.json"
     }
   },
   "future_enhancements": {
