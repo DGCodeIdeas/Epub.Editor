@@ -1,0 +1,10 @@
+{
+  "global": {
+    "ctrl+q": "quit",
+    "f1": "show_help"
+  },
+  "dashboard": {
+    "ctrl+o": "open_file",
+    "s": "search"
+  }
+}

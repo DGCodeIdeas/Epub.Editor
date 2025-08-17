@@ -1,0 +1,28 @@
+{
+  "light": {
+    "primary": "#6200EE",
+    "primary_variant": "#3700B3",
+    "secondary": "#03DAC6",
+    "background": "#FFFFFF",
+    "surface": "#FFFFFF",
+    "error": "#B00020",
+    "on_primary": "#FFFFFF",
+    "on_secondary": "#000000",
+    "on_background": "#000000",
+    "on_surface": "#000000",
+    "on_error": "#FFFFFF"
+  },
+  "dark": {
+    "primary": "#BB86FC",
+    "primary_variant": "#3700B3",
+    "secondary": "#03DAC6",
+    "background": "#121212",
+    "surface": "#121212",
+    "error": "#CF6679",
+    "on_primary": "#000000",
+    "on_secondary": "#000000",
+    "on_background": "#FFFFFF",
+    "on_surface": "#FFFFFF",
+    "on_error": "#000000"
+  }
+}
