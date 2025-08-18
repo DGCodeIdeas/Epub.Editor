@@ -1,3 +1,0 @@
-[console_scripts]
-epsilon-cli = epub_editor_pro.cli:main
-epsilon-editor = epub_editor_pro.app:main
