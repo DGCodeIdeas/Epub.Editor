@@ -1,3 +1,4 @@
 textual
 beautifulsoup4
 lxml
+pytest

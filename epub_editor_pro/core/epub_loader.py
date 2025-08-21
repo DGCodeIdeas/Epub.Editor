@@ -142,32 +142,13 @@ class EpubLoader:
         manifest = self._parse_manifest(manifest_element, ns)
         spine = self._parse_spine(spine_element, ns)
 
-        return EpubBook(metadata=metadata, manifest=manifest, spine=spine)
-
-    def _load_content(self, book: EpubBook):
-        """Loads the content of all items in the manifest into the book object."""
-        if not self.epub or not self.opf_dir:
-            raise EpubLoaderError("EPUB not loaded or OPF path not found.")
-
-        for item in book.manifest.values():
-            # Construct the full path within the archive, relative to the OPF file.
-            # Hrefs can contain URL-encoded characters, so we should decode them.
-            # The path needs to be a POSIX-style path for zipfile.
-            try:
-                href_path = urllib.parse.unquote(item.href)
-                content_path = (self.opf_dir / Path(href_path)).as_posix()
-
-                # Normalize path to handle '..' etc.
-                # Note: zipfile doesn't have a built-in normalize function.
-                # A simple normalization can be done with pathlib, but it's tricky without a real filesystem.
-                # For now, we assume paths are reasonably clean.
-
-                book.content[item.href] = self.epub.read(content_path)
-            except KeyError:
-                # Log a warning if a manifest item is not found in the archive
-                log.warning("Manifest item '%s' not found in archive at path '%s'.", item.href, content_path)
-            except Exception as e:
-                log.error("Error loading content for '%s': %s", item.href, e, exc_info=True)
+        return EpubBook(
+            filepath=str(self.file_path),
+            opf_dir=str(self.opf_dir),
+            metadata=metadata,
+            manifest=manifest,
+            spine=spine
+        )
 
 
     def _validate_epub(self):
@@ -220,7 +201,6 @@ class EpubLoader:
         self.opf_dir = Path(self.opf_path).parent
 
         book = self._parse_opf()
-        self._load_content(book)
 
         return book
 

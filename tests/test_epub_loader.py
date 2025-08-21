@@ -101,8 +101,11 @@ class TestEpubLoader(unittest.TestCase):
         self.assertEqual(book.metadata.language, "en")
         self.assertEqual(len(book.manifest), 1)
         self.assertEqual(book.manifest['text'].href, "text.xhtml")
-        self.assertIn("text.xhtml", book.content)
-        self.assertTrue(book.content["text.xhtml"].strip().endswith(b"Hello World</p></body>\n</html>"))
+
+        # Test content manager
+        content = book.content_manager.get_content("text.xhtml")
+        self.assertTrue(content.strip().endswith(b"Hello World</p></body>\n</html>"))
+
         loader.close()
 
     def test_file_not_found(self):

@@ -36,10 +36,17 @@ class SpineItem:
 @dataclass
 class EpubBook:
     """
-    Represents a complete EPUB book's structure, metadata, and content.
+    Represents a complete EPUB book's structure and metadata.
+    Content is managed by the ContentManager.
     """
+    filepath: str
+    opf_dir: str
     metadata: EpubMetadata
     manifest: Dict[str, ManifestItem] = field(default_factory=dict)
     spine: List[SpineItem] = field(default_factory=list)
     toc: List[Dict] = field(default_factory=list)  # For NCX or Nav document
-    content: Dict[str, bytes] = field(default_factory=dict)
+    is_modified: bool = False
+
+    def __post_init__(self):
+        from epub_editor_pro.core.content_manager import ContentManager
+        self.content_manager = ContentManager(self)
