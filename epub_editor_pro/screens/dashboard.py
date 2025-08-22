@@ -5,6 +5,7 @@ from textual.containers import VerticalScroll
 from textual.binding import Binding
 
 from epub_editor_pro.ui.material_components import Card, Button
+from epub_editor_pro.ui.layout_manager import LayoutManager, ResponsiveGrid
 
 
 class Dashboard(Screen):
@@ -20,7 +21,7 @@ class Dashboard(Screen):
         yield Header()
 
         book = self.app.book
-        with VerticalScroll(id="dashboard-body"):
+        with ResponsiveGrid():
             if book:
                 yield Card(
                     "File Information",
