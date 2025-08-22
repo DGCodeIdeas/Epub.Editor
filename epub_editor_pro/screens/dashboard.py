@@ -6,6 +6,7 @@ from textual.binding import Binding
 
 from epub_editor_pro.ui.material_components import Card, Button
 
+
 class Dashboard(Screen):
     """The main dashboard screen."""
 

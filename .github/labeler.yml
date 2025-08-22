@@ -1,0 +1,62 @@
+# .github/labeler.yml
+
+# Label for changes to GitHub Actions workflows
+github_actions:
+- changed-files:
+  - any-glob-to-any-file: .github/workflows/*
+
+# Label for changes to configuration files
+configuration:
+- changed-files:
+  - any-glob-to-any-file: config/*
+
+# Label for changes to the main application source code
+'source-code':
+- changed-files:
+  - any-glob-to-any-file: epub_editor_pro/**/*
+
+# Label for changes to tests
+tests:
+- changed-files:
+  - any-glob-to-any-file:
+    - tests/**/*
+    - epub_editor_pro/tests/**/*
+
+# Label for changes to dependencies
+dependencies:
+- changed-files:
+  - any-glob-to-any-file: requirements.txt
+
+# Label for changes to the setup script
+setup:
+- changed-files:
+  - any-glob-to-any-file: setup.py
+
+# Feature area labels
+'feature: core':
+- changed-files:
+  - any-glob-to-any-file: 'epub_editor_pro/core/**/*'
+'feature: screens':
+- changed-files:
+  - any-glob-to-any-file: 'epub_editor_pro/screens/**/*'
+'feature: ui':
+- changed-files:
+  - any-glob-to-any-file: 'epub_editor_pro/ui/**/*'
+'feature: utils':
+- changed-files:
+  - any-glob-to-any-file: 'epub_editor_pro/utils/**/*'
+
+# Branch name labels
+feature:
+- head-branch: ['^feature', '^feat']
+bugfix:
+- head-branch: ['^bugfix', '^fix']
+chore:
+- head-branch: ['^chore']
+
+# Combination label for high-priority changes
+'high-priority':
+- changed-files:
+  - all-globs-to-any-file:
+    - 'epub_editor_pro/**/*'
+    - 'requirements.txt'

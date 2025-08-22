@@ -5,6 +5,7 @@ from textual.containers import VerticalScroll, Horizontal
 from textual.message import Message
 from typing import List, Tuple
 
+
 class BatchOperationItem(ListItem):
     """A widget for a single find/replace operation in a batch."""
     def __init__(self, find: str = "", replace: str = "") -> None:
@@ -22,6 +23,7 @@ class BatchOperationItem(ListItem):
     def values(self) -> Tuple[str, str]:
         inputs = self.query(Input)
         return inputs[0].value, inputs[1].value
+
 
 class BatchOperationsScreen(Screen):
     """A screen for performing batch find/replace operations."""

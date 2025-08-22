@@ -5,6 +5,7 @@ from textual.containers import VerticalScroll
 
 from epub_editor_pro.ui.material_components import Card
 
+
 class HelpScreen(Screen):
     """A screen that displays help information."""
 
@@ -39,7 +40,6 @@ class HelpScreen(Screen):
             keybindings_text += "\nDashboard Keybindings:\n"
             for binding in Dashboard.BINDINGS:
                 keybindings_text += f"- {binding.key}: {binding.description}\n"
-
 
             yield Card(
                 "Keybindings",

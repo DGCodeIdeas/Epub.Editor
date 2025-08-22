@@ -1,8 +1,9 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from epub_editor_pro.core.replace_engine import ReplaceEngine
 from epub_editor_pro.core.epub_model import EpubBook, ManifestItem
+
 
 class TestReplaceEngine(unittest.TestCase):
 
@@ -73,7 +74,7 @@ class TestReplaceEngine(unittest.TestCase):
             regex=False
         )
 
-        self.assertEqual(total_replacements, 3) # 2 for 'test', 1 for 'replacement'
+        self.assertEqual(total_replacements, 3)  # 2 for 'test', 1 for 'replacement'
 
         # Check the final state of the content
         final_content = content_store['content/page1.xhtml']

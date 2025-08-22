@@ -2,9 +2,9 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import Header, Footer, ListView, ListItem, Label
 from textual.containers import VerticalScroll
-from textual.reactive import reactive
 
 from epub_editor_pro.core.search_models import SearchResult
+
 
 class SearchResultItem(ListItem):
     """A widget to display a single search result."""

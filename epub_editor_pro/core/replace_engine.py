@@ -3,13 +3,37 @@ from bs4 import BeautifulSoup
 
 from epub_editor_pro.core.epub_model import EpubBook
 
+
 class ReplaceEngine:
     """A class to perform find and replace operations within an EPUB."""
 
     def __init__(self, book: EpubBook):
         self.book = book
 
-    def replace_all(self, find: str, replace: str, case_sensitive: bool, whole_word: bool, regex: bool) -> int:
+    def _replace_in_file(self, item, search_pattern, replace) -> int:
+        content_manager = self.book.content_manager
+        try:
+            content = content_manager.get_content(item.href)
+            soup = BeautifulSoup(content, "lxml")
+            text_nodes = soup.find_all(string=True)
+            file_replacements = 0
+            for node in text_nodes:
+                if node.parent.name in ["style", "script"]:
+                    continue
+                new_content, num_subs = search_pattern.subn(replace, node.string)
+                if num_subs > 0:
+                    node.string.replace_with(new_content)
+                    file_replacements += num_subs
+            if file_replacements > 0:
+                new_html = soup.prettify(encoding="utf-8")
+                content_manager.update_content(item.href, new_html)
+            return file_replacements
+        except (FileNotFoundError, KeyError):
+            return 0
+
+    def replace_all(
+        self, find: str, replace: str, case_sensitive: bool, whole_word: bool, regex: bool
+    ) -> int:
         """
         Replaces all occurrences of a string in the EPUB content.
 
@@ -24,12 +48,10 @@ class ReplaceEngine:
             The total number of replacements made.
         """
         flags = 0 if case_sensitive else re.IGNORECASE
-
         if not regex:
             find = re.escape(find)
-
         if whole_word:
-            find = r'\b' + find + r'\b'
+            find = r"\b" + find + r"\b"
 
         try:
             search_pattern = re.compile(find, flags)
@@ -37,35 +59,11 @@ class ReplaceEngine:
             raise ValueError(f"Invalid regular expression: {e}") from e
 
         total_replacements = 0
-
-        content_manager = self.book.content_manager
         for item in self.book.manifest.values():
             if "html" in item.media_type:
-                try:
-                    content = content_manager.get_content(item.href)
-                    soup = BeautifulSoup(content, "lxml")
-
-                    text_nodes = soup.find_all(string=True)
-
-                    file_replacements = 0
-                    for node in text_nodes:
-                        # Make sure we don't modify text in style or script tags
-                        if node.parent.name in ['style', 'script']:
-                            continue
-
-                        new_content, num_subs = search_pattern.subn(replace, node.string)
-                        if num_subs > 0:
-                            node.string.replace_with(new_content)
-                            file_replacements += num_subs
-
-                    if file_replacements > 0:
-                        new_html = soup.prettify(encoding='utf-8')
-                        content_manager.update_content(item.href, new_html)
-                        total_replacements += file_replacements
-                except (FileNotFoundError, KeyError):
-                    # Silently ignore files that can't be found or read.
-                    continue
-
+                total_replacements += self._replace_in_file(
+                    item, search_pattern, replace
+                )
         return total_replacements
 
     def batch_replace_all(self, operations: list[tuple[str, str]], case_sensitive: bool, whole_word: bool, regex: bool) -> int:

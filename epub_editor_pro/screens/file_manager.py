@@ -5,6 +5,7 @@ from textual.widgets import DirectoryTree, Header, Footer
 from textual.containers import Container
 from textual.message import Message
 
+
 class EpubDirectoryTree(DirectoryTree):
     """A DirectoryTree that filters for EPUB files."""
 
