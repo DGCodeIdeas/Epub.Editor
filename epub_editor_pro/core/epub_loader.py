@@ -1,5 +1,4 @@
 import logging
-import urllib.parse
 import zipfile
 from pathlib import Path
 from typing import Optional, Dict, List
@@ -9,13 +8,16 @@ from epub_editor_pro.core.epub_model import EpubBook, EpubMetadata, ManifestItem
 
 log = logging.getLogger(__name__)
 
+
 class EpubLoaderError(Exception):
     """Base exception for EpubLoader errors."""
     pass
 
+
 class InvalidEpubFileError(EpubLoaderError):
     """Exception raised for invalid EPUB files."""
     pass
+
 
 class EpubLoader:
     """
@@ -63,23 +65,19 @@ class EpubLoader:
     def _parse_metadata(self, metadata_element, ns) -> EpubMetadata:
         """Parses the metadata element from the OPF file."""
         metadata = EpubMetadata()
+        metadata_mapping = {
+            "title": "title",
+            "creator": "creator",
+            "language": "language",
+            "identifier": "identifier",
+            "publisher": "publisher",
+            "date": "date",
+            "rights": "rights",
+        }
         for item in metadata_element:
             tag_name = etree.QName(item.tag).localname
-            # Simple assignment for main fields
-            if tag_name == 'title':
-                metadata.title = item.text
-            elif tag_name == 'creator':
-                metadata.creator = item.text
-            elif tag_name == 'language':
-                metadata.language = item.text
-            elif tag_name == 'identifier':
-                metadata.identifier = item.text
-            elif tag_name == 'publisher':
-                metadata.publisher = item.text
-            elif tag_name == 'date':
-                metadata.date = item.text
-            elif tag_name == 'rights':
-                metadata.rights = item.text
+            if tag_name in metadata_mapping:
+                setattr(metadata, metadata_mapping[tag_name], item.text)
 
             # Store all metadata
             if item.text:
@@ -149,7 +147,6 @@ class EpubLoader:
             manifest=manifest,
             spine=spine
         )
-
 
     def _validate_epub(self):
         """

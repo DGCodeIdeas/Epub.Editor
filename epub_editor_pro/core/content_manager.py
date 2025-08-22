@@ -8,6 +8,7 @@ if TYPE_CHECKING:
 
 from epub_editor_pro.core.epub_model import ManifestItem
 
+
 class ContentManager:
     """
     Manages access to the content of an EPUB book.

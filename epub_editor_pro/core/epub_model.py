@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional
 
+
 @dataclass
 class EpubMetadata:
     """
@@ -15,6 +16,7 @@ class EpubMetadata:
     rights: Optional[str] = None
     all_metadata: Dict[str, List[str]] = field(default_factory=dict)
 
+
 @dataclass
 class ManifestItem:
     """
@@ -25,6 +27,7 @@ class ManifestItem:
     media_type: str
     properties: Optional[str] = None
 
+
 @dataclass
 class SpineItem:
     """
@@ -32,6 +35,7 @@ class SpineItem:
     """
     idref: str
     linear: bool = True
+
 
 @dataclass
 class EpubBook:

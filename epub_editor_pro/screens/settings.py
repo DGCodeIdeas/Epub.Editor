@@ -5,6 +5,7 @@ from textual.containers import VerticalScroll
 
 from epub_editor_pro.ui.material_components import Card
 
+
 class SettingsScreen(Screen):
     """A screen for configuring application settings."""
 

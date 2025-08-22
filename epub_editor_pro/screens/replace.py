@@ -6,12 +6,22 @@ from textual.message import Message
 
 from epub_editor_pro.ui.material_components import Card
 
+
 class ReplaceScreen(Screen):
     """A screen for replacing text within the EPUB."""
 
     class ReplaceInitiated(Message):
         """Posted when a replace action is initiated."""
-        def __init__(self, find: str, replace: str, case_sensitive: bool, whole_word: bool, regex: bool, replace_all: bool) -> None:
+
+        def __init__(
+            self,
+            find: str,
+            replace: str,
+            case_sensitive: bool,
+            whole_word: bool,
+            regex: bool,
+            replace_all: bool,
+        ) -> None:
             self.find = find
             self.replace = replace
             self.case_sensitive = case_sensitive
@@ -61,6 +71,24 @@ class ReplaceScreen(Screen):
         regex = self.query_one("#regex-checkbox", Checkbox).value
 
         if event.button.id == "replace-button":
-            self.post_message(self.ReplaceInitiated(find_query, replace_text, case_sensitive, whole_word, regex, replace_all=False))
+            self.post_message(
+                self.ReplaceInitiated(
+                    find_query,
+                    replace_text,
+                    case_sensitive,
+                    whole_word,
+                    regex,
+                    replace_all=False,
+                )
+            )
         elif event.button.id == "replace-all-button":
-            self.post_message(self.ReplaceInitiated(find_query, replace_text, case_sensitive, whole_word, regex, replace_all=True))
+            self.post_message(
+                self.ReplaceInitiated(
+                    find_query,
+                    replace_text,
+                    case_sensitive,
+                    whole_word,
+                    regex,
+                    replace_all=True,
+                )
+            )

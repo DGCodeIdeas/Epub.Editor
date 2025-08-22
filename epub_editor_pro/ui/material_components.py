@@ -1,6 +1,7 @@
 from textual.app import ComposeResult
 from textual.containers import VerticalScroll
-from textual.widgets import Static, Button as TextualButton
+from textual.widgets import Button as TextualButton
+
 
 class Card(VerticalScroll):
     """A card widget for the UI."""

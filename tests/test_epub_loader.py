@@ -5,6 +5,7 @@ from pathlib import Path
 
 from epub_editor_pro.core.epub_loader import EpubLoader, InvalidEpubFileError
 
+
 class TestEpubLoader(unittest.TestCase):
 
     def setUp(self):
@@ -90,7 +91,6 @@ class TestEpubLoader(unittest.TestCase):
             zf.writestr("mimetype", mimetype_content, compress_type=zipfile.ZIP_STORED)
             zf.writestr("META-INF/container.xml", container_xml)
 
-
     def test_load_valid_epub(self):
         """Test loading a well-formed EPUB file."""
         loader = EpubLoader(self.valid_epub_path)
@@ -149,7 +149,8 @@ class TestEpubLoader(unittest.TestCase):
         loader = EpubLoader(self.no_opf_path)
         # This will raise a KeyError when trying to read the OPF content
         with self.assertRaises(KeyError):
-             loader.load()
+            loader.load()
+
 
 if __name__ == "__main__":
     unittest.main()

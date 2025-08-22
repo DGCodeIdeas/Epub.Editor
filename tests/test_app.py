@@ -1,6 +1,7 @@
 import unittest
 from epub_editor_pro.app import EpsilonApp
 
+
 class TestApp(unittest.TestCase):
     def test_app_importable_and_instantiable(self):
         """
@@ -12,5 +13,6 @@ class TestApp(unittest.TestCase):
         except Exception as e:
             self.fail(f"Failed to import or instantiate EpsilonApp: {e}")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

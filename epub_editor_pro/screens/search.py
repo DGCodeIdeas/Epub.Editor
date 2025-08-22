@@ -6,6 +6,7 @@ from textual.message import Message
 
 from epub_editor_pro.ui.material_components import Card
 
+
 class SearchScreen(Screen):
     """A screen for searching text within the EPUB."""
 

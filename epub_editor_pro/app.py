@@ -1,7 +1,4 @@
-from pathlib import Path
-from textual.app import App, ComposeResult
-from textual.widgets import Label
-from textual.screen import Screen
+from textual.app import App
 
 from epub_editor_pro.core.epub_model import EpubBook
 from epub_editor_pro.screens.file_manager import FileManager
@@ -15,6 +12,7 @@ from epub_editor_pro.screens.help import HelpScreen
 from epub_editor_pro.core.search_engine import SearchEngine
 from epub_editor_pro.core.replace_engine import ReplaceEngine
 from epub_editor_pro.core.epub_saver import EpubSaver
+
 
 class EpsilonApp(App):
     """A Textual app to edit EPUBs."""
@@ -83,11 +81,15 @@ class EpsilonApp(App):
             if self.search_results:
                 self.push_screen("search_results")
             else:
-                self.pop_screen() # Go back to dashboard if no results
+                self.pop_screen()  # Go back to dashboard if no results
         except ValueError as e:
             self.notify(str(e), title="Search Error", severity="error")
         except Exception as e:
-            self.notify(f"An unexpected error occurred during search: {e}", title="Error", severity="error")
+            self.notify(
+                f"An unexpected error occurred during search: {e}",
+                title="Error",
+                severity="error",
+            )
 
     def on_replace_screen_replace_initiated(self, event: ReplaceScreen.ReplaceInitiated) -> None:
         """Handle replace initiation from the ReplaceScreen."""
@@ -96,7 +98,11 @@ class EpsilonApp(App):
             return
 
         if not event.replace_all:
-            self.notify("Single replace is not implemented yet. Please use 'Replace All'.", title="Info", severity="information")
+            self.notify(
+                "Single replace is not implemented yet. Please use 'Replace All'.",
+                title="Info",
+                severity="information",
+            )
             return
 
         try:
@@ -115,7 +121,9 @@ class EpsilonApp(App):
         except Exception as e:
             self.notify(f"An unexpected error occurred during replace: {e}", title="Error", severity="error")
 
-    def on_batch_operations_screen_batch_operations_initiated(self, event: BatchOperationsScreen.BatchOperationsInitiated) -> None:
+    def on_batch_operations_screen_batch_operations_initiated(
+        self, event: BatchOperationsScreen.BatchOperationsInitiated
+    ) -> None:
         """Handle batch operations initiation."""
         if not self.book:
             self.notify("No EPUB loaded.", title="Error", severity="error")
@@ -129,14 +137,21 @@ class EpsilonApp(App):
                 operations=event.operations,
                 case_sensitive=False,
                 whole_word=False,
-                regex=False
+                regex=False,
             )
-            self.notify(f"Made {num_replacements} replacements in batch operation.", title="Batch Replace Complete")
+            self.notify(
+                f"Made {num_replacements} replacements in batch operation.",
+                title="Batch Replace Complete",
+            )
             self.pop_screen()  # Go back to dashboard
         except ValueError as e:
             self.notify(str(e), title="Batch Replace Error", severity="error")
         except Exception as e:
-            self.notify(f"An unexpected error occurred during batch replace: {e}", title="Error", severity="error")
+            self.notify(
+                f"An unexpected error occurred during batch replace: {e}",
+                title="Error",
+                severity="error",
+            )
 
     def action_save_book(self) -> None:
         """Saves the current book."""
