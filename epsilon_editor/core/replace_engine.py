@@ -1,7 +1,11 @@
 import re
+from typing import TYPE_CHECKING
 from bs4 import BeautifulSoup
 
 from epsilon_editor.core.epub_model import EpubBook
+
+if TYPE_CHECKING:
+    from epsilon_editor.core.search_models import SearchResult
 
 
 class ReplaceEngine:

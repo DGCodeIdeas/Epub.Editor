@@ -1,6 +1,6 @@
 from textual.app import ComposeResult
 from textual.screen import Screen
-from textual.widgets import Header, Footer, Button, ListView, ListItem, Input
+from textual.widgets import Header, Footer, Button, ListView, ListItem, Input, Checkbox
 from textual.containers import VerticalScroll, Horizontal
 from textual.message import Message
 from typing import List, Tuple
