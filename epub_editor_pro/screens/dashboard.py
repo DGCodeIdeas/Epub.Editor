@@ -5,6 +5,7 @@ from textual.containers import VerticalScroll
 from textual.binding import Binding
 
 from epub_editor_pro.ui.material_components import Card, Button
+from epub_editor_pro.ui.layout_manager import ResponsiveGrid
 
 
 class Dashboard(Screen):
@@ -20,45 +21,46 @@ class Dashboard(Screen):
         yield Header()
 
         book = self.app.book
-        with VerticalScroll(id="dashboard-body"):
+        with ResponsiveGrid() as grid:
             if book:
-                yield Card(
-                    "File Information",
-                    Label(f"Title: {book.metadata.title}"),
-                    Label(f"Author(s): {', '.join(book.metadata.creator) if book.metadata.creator else 'N/A'}"),
-                    Label(f"Identifier: {book.metadata.identifier}"),
-                    Label(f"Language: {book.metadata.language}"),
-                    Label(f"Publisher: {book.metadata.publisher}"),
-                    id="file-info-card"
-                )
+                with VerticalScroll(id="left-column"):
+                    yield Card(
+                        "File Information",
+                        Label(f"Title: {book.metadata.title}"),
+                        Label(f"Author(s): {', '.join(book.metadata.creator) if book.metadata.creator else 'N/A'}"),
+                        Label(f"Identifier: {book.metadata.identifier}"),
+                        Label(f"Language: {book.metadata.language}"),
+                        Label(f"Publisher: {book.metadata.publisher}"),
+                        id="file-info-card"
+                    )
 
-                num_content_files = sum(1 for item in book.manifest.values() if "xhtml" in item.media_type)
+                    num_content_files = sum(1 for item in book.manifest.values() if "xhtml" in item.media_type)
 
-                yield Card(
-                    "Statistics",
-                    Label(f"Total Files: {len(book.manifest)}"),
-                    Label(f"Content Files: {num_content_files}"),
-                    Label(f"Spine Items: {len(book.spine)}"),
-                    Label(f"TOC Entries: {len(book.toc)}"),
-                    id="stats-card"
-                )
+                    yield Card(
+                        "Statistics",
+                        Label(f"Total Files: {len(book.manifest)}"),
+                        Label(f"Content Files: {num_content_files}"),
+                        Label(f"Spine Items: {len(book.spine)}"),
+                        Label(f"TOC Entries: {len(book.toc)}"),
+                        id="stats-card"
+                    )
+                with VerticalScroll(id="right-column"):
+                    yield Card(
+                        "Quick Actions",
+                        Button("Search", id="search-button"),
+                        Button("Replace", id="replace-button"),
+                        Button("Batch Operations", id="batch-operations-button"),
+                        Button("Settings", id="settings-button"),
+                        Button("Help", id="help-button"),
+                        id="quick-actions-card"
+                    )
 
-                yield Card(
-                    "Quick Actions",
-                    Button("Search", id="search-button"),
-                    Button("Replace", id="replace-button"),
-                    Button("Batch Operations", id="batch-operations-button"),
-                    Button("Settings", id="settings-button"),
-                    Button("Help", id="help-button"),
-                    id="quick-actions-card"
-                )
-
-                yield Card(
-                    "File Operations",
-                    Button("Save", id="save-button", variant="primary", disabled=not book.is_modified),
-                    Button("Save & Quit", id="save-quit-button"),
-                    id="file-ops-card"
-                )
+                    yield Card(
+                        "File Operations",
+                        Button("Save", id="save-button", variant="primary", disabled=not book.is_modified),
+                        Button("Save & Quit", id="save-quit-button"),
+                        id="file-ops-card"
+                    )
             else:
                 yield Card("File Information", Label("No EPUB loaded."), id="file-info-card")
 
