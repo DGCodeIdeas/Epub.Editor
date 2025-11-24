@@ -1,5 +1,5 @@
 import unittest
-from epub_editor_pro.app import EpsilonApp
+from epub_editor_pro.epub_editor_pro import EpsilonApp
 
 
 class TestApp(unittest.TestCase):
