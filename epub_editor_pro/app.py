@@ -91,31 +91,43 @@ class EpsilonApp(App):
                 severity="error",
             )
 
+    def on_search_results_screen_replace_selection(
+        self, event: SearchResultsScreen.ReplaceSelection
+    ) -> None:
+        """Handle the selection of a search result for replacement."""
+        self.push_screen(ReplaceScreen(search_result=event.search_result))
+
     def on_replace_screen_replace_initiated(self, event: ReplaceScreen.ReplaceInitiated) -> None:
         """Handle replace initiation from the ReplaceScreen."""
         if not self.book:
             self.notify("No EPUB loaded.", title="Error", severity="error")
             return
 
-        if not event.replace_all:
-            self.notify(
-                "Single replace is not implemented yet. Please use 'Replace All'.",
-                title="Info",
-                severity="information",
-            )
-            return
-
         try:
             replace_engine = ReplaceEngine(self.book)
-            num_replacements = replace_engine.replace_all(
-                event.find,
-                event.replace,
-                event.case_sensitive,
-                event.whole_word,
-                event.regex
-            )
-            self.notify(f"Made {num_replacements} replacements.", title="Replace Complete")
-            self.pop_screen()  # Go back to dashboard
+            if event.replace_all:
+                num_replacements = replace_engine.replace_all(
+                    event.find,
+                    event.replace,
+                    event.case_sensitive,
+                    event.whole_word,
+                    event.regex
+                )
+                self.notify(f"Made {num_replacements} replacements.", title="Replace Complete")
+                self.pop_screen()
+            elif event.search_result:
+                success = replace_engine.replace_one(event.search_result, event.replace)
+                if success:
+                    self.notify("Replacement successful.", title="Replace Complete")
+                    self.search_results.remove(event.search_result)
+                    self.pop_screen()
+                    self.query_one(SearchResultsScreen).refresh_results()
+
+                else:
+                    self.notify("Replacement failed.", title="Error", severity="error")
+            else:
+                self.notify("No action to perform.", title="Info", severity="information")
+
         except ValueError as e:
             self.notify(str(e), title="Replace Error", severity="error")
         except Exception as e:
@@ -131,13 +143,11 @@ class EpsilonApp(App):
 
         try:
             replace_engine = ReplaceEngine(self.book)
-            # Note: The BatchOperationsScreen currently doesn't have controls for these options.
-            # Hardcoding them to False for now. This can be a future enhancement.
             num_replacements = replace_engine.batch_replace_all(
                 operations=event.operations,
-                case_sensitive=False,
-                whole_word=False,
-                regex=False,
+                case_sensitive=event.case_sensitive,
+                whole_word=event.whole_word,
+                regex=event.regex,
             )
             self.notify(
                 f"Made {num_replacements} replacements in batch operation.",

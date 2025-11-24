@@ -66,6 +66,23 @@ class ReplaceEngine:
                 )
         return total_replacements
 
+    def replace_one(self, search_result: "SearchResult", replace_text: str) -> bool:
+        content_manager = self.book.content_manager
+        try:
+            content = content_manager.get_content(search_result.item_href)
+            lines = content.splitlines(True)
+            if 0 <= search_result.line_number < len(lines):
+                line = lines[search_result.line_number]
+                new_line = line.replace(search_result.match_text, replace_text, 1)
+                if new_line != line:
+                    lines[search_result.line_number] = new_line
+                    new_content = "".join(lines)
+                    content_manager.update_content(search_result.item_href, new_content.encode('utf-8'))
+                    return True
+            return False
+        except (FileNotFoundError, KeyError):
+            return False
+
     def batch_replace_all(self, operations: list[tuple[str, str]], case_sensitive: bool, whole_word: bool, regex: bool) -> int:
         """
         Performs a batch of replace all operations.

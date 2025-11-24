@@ -5,10 +5,17 @@ from textual.containers import VerticalScroll, Horizontal
 from textual.message import Message
 
 from epub_editor_pro.ui.material_components import Card
+from epub_editor_pro.core.search_models import SearchResult
 
 
 class ReplaceScreen(Screen):
     """A screen for replacing text within the EPUB."""
+
+    def __init__(
+        self, search_result: SearchResult | None = None, *args, **kwargs
+    ) -> None:
+        self.search_result = search_result
+        super().__init__(*args, **kwargs)
 
     class ReplaceInitiated(Message):
         """Posted when a replace action is initiated."""
@@ -21,6 +28,7 @@ class ReplaceScreen(Screen):
             whole_word: bool,
             regex: bool,
             replace_all: bool,
+            search_result: SearchResult | None = None,
         ) -> None:
             self.find = find
             self.replace = replace
@@ -28,6 +36,7 @@ class ReplaceScreen(Screen):
             self.whole_word = whole_word
             self.regex = regex
             self.replace_all = replace_all
+            self.search_result = search_result
             super().__init__()
 
     def compose(self) -> ComposeResult:
@@ -54,6 +63,12 @@ class ReplaceScreen(Screen):
             )
         yield Footer()
 
+    def on_mount(self) -> None:
+        """Prefill the find input if a search result was passed."""
+        if self.search_result:
+            find_input = self.query_one("#find-input", Input)
+            find_input.value = self.search_result.match_text
+
     def on_button_pressed(self, event: Button.Pressed) -> None:
         """Handle button presses."""
         if event.button.id == "cancel-button":
@@ -79,6 +94,7 @@ class ReplaceScreen(Screen):
                     whole_word,
                     regex,
                     replace_all=False,
+                    search_result=self.search_result,
                 )
             )
         elif event.button.id == "replace-all-button":
