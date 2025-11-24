@@ -14,8 +14,8 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "epsilon-editor=epub_editor_pro.app:main",
-            "epsilon-cli=epub_editor_pro.cli:main",
+            "epsilon-editor=epub_editor_pro.epub_editor_pro:main",
+            "epsilon-cli=epub_editor_pro.epub_cli:main",
         ],
     },
 )
