@@ -2,6 +2,7 @@ import re
 from bs4 import BeautifulSoup
 
 from epub_editor_pro.core.epub_model import EpubBook
+from epub_editor_pro.core.search_models import SearchResult
 
 
 class ReplaceEngine:
@@ -66,7 +67,7 @@ class ReplaceEngine:
                 )
         return total_replacements
 
-    def replace_one(self, search_result: "SearchResult", replace_text: str) -> bool:
+    def replace_one(self, search_result: SearchResult, replace_text: str) -> bool:
         content_manager = self.book.content_manager
         try:
             content = content_manager.get_content(search_result.item_href)
