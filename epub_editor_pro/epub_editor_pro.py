@@ -1,6 +1,8 @@
+from pathlib import Path
 from textual.app import App
 
 from epub_editor_pro.core.epub_model import EpubBook
+from epub_editor_pro.core.settings_model import SettingsManager
 from epub_editor_pro.screens.file_manager import FileManager
 from epub_editor_pro.screens.dashboard import Dashboard
 from epub_editor_pro.screens.search import SearchScreen
@@ -12,6 +14,10 @@ from epub_editor_pro.screens.help import HelpScreen
 from epub_editor_pro.core.search_engine import SearchEngine
 from epub_editor_pro.core.replace_engine import ReplaceEngine
 from epub_editor_pro.core.epub_saver import EpubSaver
+
+
+DEFAULT_SETTINGS_PATH = Path("config/defaults.json")
+USER_SETTINGS_PATH = Path("config/app_config.json")
 
 
 class EpsilonApp(App):
@@ -40,16 +46,24 @@ class EpsilonApp(App):
 
     def __init__(self):
         super().__init__()
+        self.settings_manager = SettingsManager(
+            default_settings_path=DEFAULT_SETTINGS_PATH,
+            user_settings_path=USER_SETTINGS_PATH,
+        )
         self.book: EpubBook | None = None
         self.search_results = []
 
     def on_mount(self) -> None:
         """Called when the app is first mounted."""
+        self.dark = self.settings_manager.get("theme") == "dark"
         self.push_screen("file_manager")
 
     def action_toggle_dark(self) -> None:
         """An action to toggle dark mode."""
         self.dark = not self.dark
+        self.settings_manager.set("theme", "dark" if self.dark else "light")
+        self.settings_manager.save_settings()
+        self.notify(f"Theme set to {'dark' if self.dark else 'light'}")
 
     def on_file_manager_file_selected(self, event: FileManager.FileSelected) -> None:
         """Handle file selection from the FileManager."""
