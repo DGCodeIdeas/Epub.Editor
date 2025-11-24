@@ -1,6 +1,9 @@
+from pathlib import Path
 from textual.app import App
 
 from epub_editor_pro.core.epub_model import EpubBook
+from epub_editor_pro.core.settings_model import SettingsManager
+from epub_editor_pro.screens.screen_manager import ScreenManager
 from epub_editor_pro.screens.file_manager import FileManager
 from epub_editor_pro.screens.dashboard import Dashboard
 from epub_editor_pro.screens.search import SearchScreen
@@ -12,6 +15,10 @@ from epub_editor_pro.screens.help import HelpScreen
 from epub_editor_pro.core.search_engine import SearchEngine
 from epub_editor_pro.core.replace_engine import ReplaceEngine
 from epub_editor_pro.core.epub_saver import EpubSaver
+
+
+DEFAULT_SETTINGS_PATH = Path("config/defaults.json")
+USER_SETTINGS_PATH = Path("config/app_config.json")
 
 
 class EpsilonApp(App):
@@ -34,22 +41,31 @@ class EpsilonApp(App):
         ("f1", "show_help", "Help"),
     ]
 
-    def action_show_help(self) -> None:
-        """Show the help screen."""
-        self.push_screen("help")
-
     def __init__(self):
         super().__init__()
+        self.settings_manager = SettingsManager(
+            default_settings_path=DEFAULT_SETTINGS_PATH,
+            user_settings_path=USER_SETTINGS_PATH,
+        )
+        self.screen_manager = ScreenManager(self)
         self.book: EpubBook | None = None
         self.search_results = []
 
+    def action_show_help(self) -> None:
+        """Show the help screen."""
+        self.screen_manager.push("help")
+
     def on_mount(self) -> None:
         """Called when the app is first mounted."""
-        self.push_screen("file_manager")
+        self.dark = self.settings_manager.get("theme") == "dark"
+        self.screen_manager.push("file_manager")
 
     def action_toggle_dark(self) -> None:
         """An action to toggle dark mode."""
         self.dark = not self.dark
+        self.settings_manager.set("theme", "dark" if self.dark else "light")
+        self.settings_manager.save_settings()
+        self.notify(f"Theme set to {'dark' if self.dark else 'light'}")
 
     def on_file_manager_file_selected(self, event: FileManager.FileSelected) -> None:
         """Handle file selection from the FileManager."""
@@ -57,7 +73,7 @@ class EpsilonApp(App):
         try:
             loader = EpubLoader(event.path)
             self.book = loader.load()
-            self.push_screen("dashboard")
+            self.screen_manager.push("dashboard")
         except InvalidEpubFileError as e:
             self.notify(f"Error loading EPUB: {e}", title="Error", severity="error")
         except Exception as e:
@@ -79,9 +95,9 @@ class EpsilonApp(App):
             ))
             self.notify(f"Found {len(self.search_results)} results.", title="Search Complete")
             if self.search_results:
-                self.push_screen("search_results")
+                self.screen_manager.push("search_results")
             else:
-                self.pop_screen()  # Go back to dashboard if no results
+                self.screen_manager.pop()  # Go back to dashboard if no results
         except ValueError as e:
             self.notify(str(e), title="Search Error", severity="error")
         except Exception as e:
@@ -95,7 +111,7 @@ class EpsilonApp(App):
         self, event: SearchResultsScreen.ReplaceSelection
     ) -> None:
         """Handle the selection of a search result for replacement."""
-        self.push_screen(ReplaceScreen(search_result=event.search_result))
+        self.screen_manager.push(ReplaceScreen(search_result=event.search_result))
 
     def on_replace_screen_replace_initiated(self, event: ReplaceScreen.ReplaceInitiated) -> None:
         """Handle replace initiation from the ReplaceScreen."""
@@ -114,13 +130,13 @@ class EpsilonApp(App):
                     event.regex
                 )
                 self.notify(f"Made {num_replacements} replacements.", title="Replace Complete")
-                self.pop_screen()
+                self.screen_manager.pop()
             elif event.search_result:
                 success = replace_engine.replace_one(event.search_result, event.replace)
                 if success:
                     self.notify("Replacement successful.", title="Replace Complete")
                     self.search_results.remove(event.search_result)
-                    self.pop_screen()
+                    self.screen_manager.pop()
                     self.query_one(SearchResultsScreen).refresh_results()
 
                 else:
@@ -153,7 +169,7 @@ class EpsilonApp(App):
                 f"Made {num_replacements} replacements in batch operation.",
                 title="Batch Replace Complete",
             )
-            self.pop_screen()  # Go back to dashboard
+            self.screen_manager.pop()  # Go back to dashboard
         except ValueError as e:
             self.notify(str(e), title="Batch Replace Error", severity="error")
         except Exception as e:

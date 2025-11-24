@@ -73,15 +73,15 @@ class Dashboard(Screen):
     def on_button_pressed(self, event: Button.Pressed) -> None:
         """Handle button presses."""
         if event.button.id == "search-button":
-            self.app.push_screen("search")
+            self.app.screen_manager.push("search")
         elif event.button.id == "replace-button":
-            self.app.push_screen("replace")
+            self.app.screen_manager.push("replace")
         elif event.button.id == "batch-operations-button":
-            self.app.push_screen("batch_operations")
+            self.app.screen_manager.push("batch_operations")
         elif event.button.id == "settings-button":
-            self.app.push_screen("settings")
+            self.app.screen_manager.push("settings")
         elif event.button.id == "help-button":
-            self.app.push_screen("help")
+            self.app.screen_manager.push("help")
         elif event.button.id == "save-button":
             self.action_save()
         elif event.button.id == "save-quit-button":
