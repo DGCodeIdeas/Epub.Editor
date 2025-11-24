@@ -1,5 +1,5 @@
 import json
-from dataclasses import dataclass, asdict, field
+from dataclasses import dataclass, asdict, fields
 from pathlib import Path
 from typing import Dict, Any
 
@@ -28,7 +28,12 @@ class SettingsManager:
         user_settings = self._load_json_file(self.user_settings_path)
 
         merged_settings = {**defaults, **user_settings}
-        return Settings(**merged_settings)
+
+        # Filter out keys that are not in the Settings dataclass
+        valid_keys = {f.name for f in fields(Settings)}
+        filtered_settings = {k: v for k, v in merged_settings.items() if k in valid_keys}
+
+        return Settings(**filtered_settings)
 
     def _load_json_file(self, path: Path) -> Dict[str, Any]:
         """Loads a JSON file, returning an empty dict if it doesn't exist."""
